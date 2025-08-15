@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 // =============================================
 // デザイン刷新（中央配置・テキストは左寄せのまま）
@@ -68,8 +68,8 @@ export default function App() {
       </header>
 
       {/* コンテンツ（中央寄せラッパー） */}
-      <main className="px-4 py-6 md:py-8">
-        <div className="mx-auto w-full max-w-2xl grid gap-4 md:gap-6">
+      <main className="px-4 py-6 md:py-8 flex justify-center">
+        <div className="w-full max-w-2xl grid gap-4 md:gap-6">
           {/* コントロールカード（中央配置、要素は扱いやすいサイズ） */}
           <section aria-label="設定" className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-4">
             <label htmlFor="n-input" className="block text-sm font-semibold mb-2">N文字ごとに改行</label>
@@ -123,6 +123,7 @@ export default function App() {
 
           <footer className="text-xs opacity-70 text-center py-2">
             <p>※ ブラウザだけで動作します。データは送信されません。</p>
+            
           </footer>
         </div>
       </main>
