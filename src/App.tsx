@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 // =============================================
 // デザイン刷新（中央配置・テキストは左寄せのまま）
@@ -9,8 +9,7 @@ import { useEffect, useMemo, useState } from "react";
 
 export default function App() {
   const [text, setText] = useState(
-    `朝焼けのホームに珈琲の香り満ち、人の足音が重なり、冷えた指先もほぐれて、今日はやさしく始まる、胸の奥が少し軽くなる気がした。
-`
+    "例）サンプルサンプルサンプルサンプルサンプルサンプルサンプルサンプルサンプルサンプルサンプルサンプルサンプル"
   );
   const [n, setN] = useState(2); // N文字ごとに改行（機能は不変）
   const [out, setOut] = useState("");
@@ -63,13 +62,13 @@ export default function App() {
       <header className="w-full border-b border-slate-200/80 dark:border-slate-700/60 bg-white/70 dark:bg-slate-900/60 backdrop-blur supports-[backdrop-filter]:bg-white/40 sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-4 py-4 text-center">
           <h1 className="text-xl md:text-2xl font-bold tracking-tight">N文字ごとに改行（全て=1）</h1>
-          <p className="text-xs md:text-sm opacity-70 mt-1">ローカル処理／軽量・高速</p>
+          <p className="text-xs md:text-sm opacity-70 mt-1">軽量・高速</p>
         </div>
       </header>
 
       {/* コンテンツ（中央寄せラッパー） */}
       <main className="px-4 py-6 md:py-8 flex justify-center">
-        <div className="w-full max-w-2xl grid gap-4 md:gap-6">
+        <div className="mx-auto w-full max-w-2xl grid gap-4 md:gap-6">
           {/* コントロールカード（中央配置、要素は扱いやすいサイズ） */}
           <section aria-label="設定" className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-4">
             <label htmlFor="n-input" className="block text-sm font-semibold mb-2">N文字ごとに改行</label>
@@ -123,7 +122,6 @@ export default function App() {
 
           <footer className="text-xs opacity-70 text-center py-2">
             <p>※ ブラウザだけで動作します。データは送信されません。</p>
-            
           </footer>
         </div>
       </main>
