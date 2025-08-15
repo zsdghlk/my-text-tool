@@ -9,7 +9,7 @@ import { useEffect, useMemo, useState } from "react";
 
 export default function App() {
   const [text, setText] = useState(
-    `朝焼けのホームに珈琲の香り満ち、人の足音が重なり、冷えた指先もほぐれて、今日はやさしく始まる、胸の奥が少し軽く、気がした。
+    `朝焼けのホームに珈琲の香り満ち、人の足音が重なり、冷えた指先もほぐれて、今日はやさしく始まる、胸の奥が少し軽くなる気がした。
 `
   );
   const [n, setN] = useState(2); // N文字ごとに改行（機能は不変）
