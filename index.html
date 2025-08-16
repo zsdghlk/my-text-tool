@@ -7,159 +7,182 @@
 <title>ショートカット図鑑｜トップ</title>
 <style>
   :root{
-    --bg:#0b1020; --card:#0d1326; --text:#eef2ff; --muted:#9aa3b2; --border:#1b2542; --accent:#6ee7ff;
-    --radius:14px; --shadow:0 8px 24px rgba(0,0,0,.28);
+    --bg:#0b1020; --panel:#0d1326; --text:#eef2ff; --muted:#9aa3b2; --border:#1b2542; --accent:#6ee7ff;
+    --radius:16px; --shadow:0 8px 24px rgba(0,0,0,.28);
+    --pad-x:16px;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{height:100%}
   body{
-    margin:0;
-    font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP",sans-serif;
+    margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP",sans-serif;
     color:var(--text);
     background:
-      radial-gradient(900px 600px at 15% -10%, #152052 0%, transparent 60%),
+      radial-gradient(900px 520px at 15% -10%, #152052 0%, transparent 60%),
       var(--bg);
-    display:flex; flex-direction:column;
-    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    display:flex; flex-direction:column; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
   }
 
   /* ヘッダー */
   header{
-    position:sticky; top:0; z-index:3;
-    padding:calc(env(safe-area-inset-top) + 10px) 16px 10px;
+    position:sticky; top:0; z-index:10;
+    padding:calc(env(safe-area-inset-top) + 10px) var(--pad-x) 10px;
     background:linear-gradient(180deg, rgba(11,16,32,1), rgba(11,16,32,.85) 60%, rgba(11,16,32,0));
     backdrop-filter: blur(6px);
   }
-  h1{
-    margin:0;
-    font-size:clamp(16px, 2.8vw, 20px);
-    letter-spacing:.2px;
+  h1{ margin:0; font-size:clamp(16px, 3.5vw, 20px); letter-spacing:.2px; }
+
+  /* セグメント（Windows / VS Code 切替） */
+  .seg{
+    margin:8px var(--pad-x) 10px; padding:4px;
+    border:1px solid var(--border); border-radius:999px; background:rgba(13,19,38,.6);
+    display:flex; gap:6px;
+  }
+  .seg button{
+    flex:1; border:0; padding:12px 10px; border-radius:999px;
+    background:transparent; color:var(--text);
+    font-weight:800; font-size:clamp(13px, 3.2vw, 15px); letter-spacing:.2px;
+  }
+  .seg button[aria-pressed="true"]{
+    background:linear-gradient(180deg,#12204a,#0d162f); border:1px solid var(--accent);
+    box-shadow:0 0 0 3px rgba(110,231,255,.22) inset;
   }
 
-  /* セクション見出し（スクロールしても邪魔しない高さ） */
-  .section{
-    padding:8px 16px 4px;
-    position:sticky; top:calc(env(safe-area-inset-top) + 48px);
-    background:linear-gradient(180deg, rgba(11,16,32,.92), rgba(11,16,32,.65) 60%, rgba(11,16,32,0));
-    z-index:2;
-  }
-  .section h2{
-    margin:0;
-    font-size:clamp(12px, 2.3vw, 14px);
-    color:var(--muted);
-    letter-spacing:.2px;
-    font-weight:600;
-  }
-
-  /* グリッド：モバイルは1列 → 横幅があれば2列 */
+  /* グリッド */
+  main{ padding:0 0 calc(env(safe-area-inset-bottom) + 8px) }
   .grid{
-    display:grid; gap:12px;
-    padding:8px 16px 20px; margin-bottom:6px;
+    display:grid; gap:12px; padding:8px var(--pad-x) 20px;
     grid-template-columns:1fr;
   }
-  @media (min-width:540px){
-    .grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
-  }
+  @media (min-width:560px){ .grid{ grid-template-columns:repeat(2, minmax(0,1fr)); } }
 
-  /* カード（押しやすいサイズと視認性） */
+  /* カード */
   a.card{
-    display:flex; align-items:center; justify-content:center;
-    text-decoration:none; color:inherit; text-align:center;
-    padding:16px 14px;
-    min-height:72px; /* 親指で押しやすい高さ */
-    border-radius:var(--radius);
-    background:linear-gradient(180deg,#121b38, #0d1326);
-    border:1px solid var(--border);
-    font-weight:700;
-    font-size:clamp(14px, 2.8vw, 16px);
-    letter-spacing:.2px;
-    box-shadow:var(--shadow);
+    display:flex; align-items:center; justify-content:center; text-decoration:none; color:inherit; text-align:center;
+    padding:16px 14px; min-height:76px;  /* 押しやすさ確保 */
+    border-radius:var(--radius); background:linear-gradient(180deg,#121b38,#0d1326);
+    border:1px solid var(--border); box-shadow:var(--shadow);
+    font-weight:800; font-size:clamp(14px, 3.4vw, 17px); letter-spacing:.2px;
     transition:transform .06s ease, box-shadow .12s ease, border-color .12s ease;
     will-change:transform;
   }
-  a.card:active{ transform:scale(.98) }
-  a.card:focus-visible{
-    outline:none;
-    border-color:var(--accent);
-    box-shadow:0 0 0 3px rgba(110,231,255,.25), var(--shadow);
+  a.card:active{ transform:scale(.985) }
+  a.card:focus-visible{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(110,231,255,.25), var(--shadow); }
+
+  /* グループ見出し（視線の妨げにならない控えめ表示） */
+  .sectionTitle{
+    margin:6px var(--pad-x) 0; color:var(--muted);
+    font-size:clamp(12px, 2.8vw, 14px); letter-spacing:.2px; font-weight:700;
   }
 
-  /* 余白と安全領域 */
   footer{
-    padding:12px 16px calc(env(safe-area-inset-bottom) + 16px);
+    padding:12px var(--pad-x) calc(env(safe-area-inset-bottom) + 16px);
     color:var(--muted); font-size:12px; text-align:center;
   }
 
-  /* スクロール感 */
   :root{ scroll-behavior:smooth }
-  body{ -webkit-overflow-scrolling:touch }
+  @media (prefers-reduced-motion: reduce){
+    :root{ scroll-behavior:auto }
+    .seg button[aria-pressed="true"]{ box-shadow:none }
+    a.card{ transition:none }
+  }
 </style>
 </head>
 <body>
-  <header><h1>ショートカット図鑑</h1></header>
+  <header>
+    <h1>ショートカット図鑑</h1>
+    <div class="seg" role="tablist" aria-label="カテゴリ切替">
+      <button id="tab-win" role="tab" aria-controls="panel-win" aria-selected="true" aria-pressed="true">Windows</button>
+      <button id="tab-vsc" role="tab" aria-controls="panel-vsc" aria-selected="false" aria-pressed="false">VS Code</button>
+    </div>
+  </header>
 
-  <!-- セクションは「Windows → VS Code」の順。app.html の DATA と対応 -->
-  <div id="root" aria-label="カテゴリ一覧（ボタンで選択）"></div>
+  <main>
+    <!-- Windows パネル -->
+    <h2 id="panel-win-title" class="sectionTitle">Windows</h2>
+    <section id="panel-win" class="grid" role="tabpanel" aria-labelledby="tab-win">
+      <!-- JS で挿入 -->
+    </section>
+
+    <!-- VS Code パネル（初期は非表示だが DOM は保持） -->
+    <h2 id="panel-vsc-title" class="sectionTitle" hidden>VS Code</h2>
+    <section id="panel-vsc" class="grid" role="tabpanel" aria-labelledby="tab-vsc" hidden>
+      <!-- JS で挿入 -->
+    </section>
+  </main>
 
   <footer>© your-site</footer>
 
 <script>
 /* app.html の DATA 順（0始まり）
-   Windows: 0-13,  VS Code: 14-24
+   Windows: 0-13,  VS Code: 14-24（VS Code（共通）は 6）
 */
-const GROUPS = [
-  {
-    title: "Windows",
-    items: [
-      ["基本編集（1）", 0],
-      ["基本編集（2）", 1],
-      ["テキスト移動/選択", 2],
-      ["ウィンドウ/仮想デスクトップ", 3],
-      ["ファイル/システム", 4],
-      ["ブラウザ（Edge/Chrome）", 5],
-      ["ターミナル/コマンド", 7],
-      ["Excel / スプレッドシート", 8],
-      ["エクスプローラ操作（タブ/移動）", 9],
-      ["システム＆検索", 10],
-      ["画面キャプチャ", 11],
-      ["入力補助（IME/変換）", 12],
-      ["その他便利（電源/クイックリンク）", 13],
-    ],
-  },
-  {
-    title: "VS Code",
-    items: [
-      ["VS Code（共通）", 6],  // ← ここへ移動済み
-      ["基本編集", 14],
-      ["検索・置換", 15],
-      ["ファイル/エディタ操作", 16],
-      ["ナビゲーション/ビュー", 17],
-      ["編集支援（Go To/Refactor/整形）", 18],
-      ["マルチカーソル/選択", 19],
-      ["表示/レイアウト", 20],
-      ["デバッグ", 21],
-      ["統合ターミナル", 22],
-      ["Git/ソース管理", 23],
-      ["ワークベンチ全般（設定/キーバインド）", 24],
-    ],
-  },
-];
+const GROUPS = {
+  Windows: [
+    ["基本編集（1）", 0],
+    ["基本編集（2）", 1],
+    ["テキスト移動/選択", 2],
+    ["ウィンドウ/仮想デスクトップ", 3],
+    ["ファイル/システム", 4],
+    ["ブラウザ（Edge/Chrome）", 5],
+    ["ターミナル/コマンド", 7],
+    ["Excel / スプレッドシート", 8],
+    ["エクスプローラ操作（タブ/移動）", 9],
+    ["システム＆検索", 10],
+    ["画面キャプチャ", 11],
+    ["入力補助（IME/変換）", 12],
+    ["その他便利（電源/クイックリンク）", 13],
+  ],
+  "VS Code": [
+    ["VS Code（共通）", 6],
+    ["基本編集", 14],
+    ["検索・置換", 15],
+    ["ファイル/エディタ操作", 16],
+    ["ナビゲーション/ビュー", 17],
+    ["編集支援（Go To/Refactor/整形）", 18],
+    ["マルチカーソル/選択", 19],
+    ["表示/レイアウト", 20],
+    ["デバッグ", 21],
+    ["統合ターミナル", 22],
+    ["Git/ソース管理", 23],
+    ["ワークベンチ全般（設定/キーバインド）", 24],
+  ],
+};
 
-const root = document.getElementById('root');
-
-function renderGroup(title, items){
-  const sec = document.createElement('section');
-  sec.innerHTML = `
-    <div class="section"><h2>${title}</h2></div>
-    <div class="grid" role="list">${items.map(([label, idx]) =>
-      `<a class="card" role="listitem" href="app.html?cat=${idx}" aria-label="${title}｜${label}">
-        ${title}｜${label}
-      </a>`
-    ).join('')}</div>
-  `;
-  root.appendChild(sec);
+const $ = (s)=>document.querySelector(s);
+function renderGrid(panelId, items, title){
+  const panel = $(panelId);
+  panel.innerHTML = items.map(([label, idx]) =>
+    `<a class="card" href="app.html?cat=${idx}" aria-label="${title}｜${label}">
+      ${title}｜${label}
+     </a>`
+  ).join('');
 }
-GROUPS.forEach(g => renderGroup(g.title, g.items));
+
+// 初期レンダリング
+renderGrid('#panel-win', GROUPS['Windows'], 'Windows');
+renderGrid('#panel-vsc', GROUPS['VS Code'], 'VS Code');
+
+// タブ切替（表示/非表示のみ。スクロール位置を保持）
+const tabWin = $('#tab-win'), tabVsc = $('#tab-vsc');
+const winPanel = $('#panel-win'), vscPanel = $('#panel-vsc');
+const winTitle = $('#panel-win-title'), vscTitle = $('#panel-vsc-title');
+
+function activate(which){
+  const isWin = which === 'win';
+  tabWin.setAttribute('aria-pressed', isWin); tabWin.setAttribute('aria-selected', isWin);
+  tabVsc.setAttribute('aria-pressed', !isWin); tabVsc.setAttribute('aria-selected', !isWin);
+
+  winPanel.hidden = !isWin; winTitle.hidden = !isWin;
+  vscPanel.hidden = isWin;  vscTitle.hidden = isWin;
+
+  // 画面上部に見出しを揃える（親指が届きやすい）
+  (isWin ? winTitle : vscTitle).scrollIntoView({block:'start', behavior:'smooth'});
+}
+tabWin.addEventListener('click', ()=>activate('win'));
+tabVsc.addEventListener('click', ()=>activate('vsc'));
+
+// 初期状態は Windows
+activate('win');
 </script>
 </body>
 </html>
