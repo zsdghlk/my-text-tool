@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>ショートカット図鑑</title>
+<style>
+  :root{
+    --bg:#0b1020; --card:#0d1326; --text:#e5e7eb; --muted:#9aa3b2; --border:#1b2542; --accent:#6ee7ff;
+    --pad:12px; --fs:15px; --fs-key:14px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans JP",sans-serif;
+    background:radial-gradient(800px 500px at 15% -10%, #152052 0%, transparent 60%), var(--bg);
+    color:var(--text); overflow:hidden;
+  }
+  header{
+    position:sticky; top:env(safe-area-inset-top); z-index:2;
+    padding:calc(env(safe-area-inset-top)) var(--pad) 8px;
+    background:linear-gradient(0deg,rgba(11,16,32,.0),rgba(11,16,32,.9) 30%, rgba(11,16,32,1));
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+  }
+  h1{margin:0; font-size:16px; letter-spacing:.2px; flex:1; text-align:center}
+  .back{
+    text-decoration:none; color:var(--text); font-size:13px;
+    padding:6px 10px; border-radius:10px;
+    border:1px solid var(--border); background:#0a1228;
+  }
+  .container{
+    display:flex; height:calc(100% - 56px);
+    overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
+  }
+  .card{
+    flex:0 0 100%; scroll-snap-align:center;
+    padding:6px var(--pad) calc(env(safe-area-inset-bottom) + 14px);
+    display:flex; flex-direction:column; gap:8px; min-height:0;
+  }
+  .title{font-size:13px; color:var(--muted); display:flex; justify-content:space-between}
+  .panel{
+    flex:1; min-height:0; border:1px solid var(--border); border-radius:14px; background:var(--card);
+    overflow:auto; padding:8px;
+  }
+  .row{ padding:10px 10px 12px; border-bottom:1px solid #122046; display:grid; gap:6px; }
+  .row:last-child{ border-bottom:none }
+  .op{ font-size:var(--fs); line-height:1.42; color:#dbeafe; letter-spacing:.2px; }
+  .key{ font-size:var(--fs-key); line-height:1.35; color:#cfe0ff; font-family:ui-monospace,Consolas,Menlo,monospace; }
+  kbd{
+    display:inline-block; min-width:1.6em; padding:.25em .45em; margin:0 .15em;
+    border:1px solid #2a3b66; border-bottom-width:2px; border-radius:6px;
+    background:#0a1430; font-weight:600; font-size:.95em;
+  }
+  .dots{position:fixed; bottom:calc(env(safe-area-inset-bottom) + 10px); left:0; right:0; display:flex; gap:6px; justify-content:center; pointer-events:none}
+  .dot{width:6px;height:6px;border-radius:999px;background:#2a3b66;opacity:.7;transition:.2s}
+  .dot.active{background:var(--accent); opacity:1; transform:scale(1.2)}
+</style>
+</head>
+<body>
+  <header>
+    <a class="back" href="index.html">← トップ</a>
+    <h1 id="head">ショートカット図鑑</h1>
+    <div style="width:60px"></div>
+  </header>
+
+  <div id="wrap" class="container" aria-label="カテゴリを横スワイプで切替"></div>
+  <div id="dots" class="dots"></div>
+
+<script>
+/* ========= ユーティリティ ========= */
+const wrap = document.getElementById('wrap');
+const dots = document.getElementById('dots');
+
+const keycap = s =>
+  String(s)
+    .replace(/\b(Ctrl|Alt|Shift|Win|Tab|Home|End|PageUp|PageDown|F\d{1,2}|Esc|Enter|Space|Backspace|Delete|Up|Down|Left|Right)\b/g, '<kbd>$1</kbd>')
+    .replace(/\+/g,' + ')
+    .replace(/`/g, '<kbd>`</kbd>');
+
+function makeCard(page){
+  const card = document.createElement('section'); card.className = 'card';
+  const title = document.createElement('div'); title.className = 'title';
+  title.innerHTML = `<span>${page.cat}</span><span>${page.rows.length}件</span>`;
+  const panel = document.createElement('div'); panel.className = 'panel';
+  panel.innerHTML = page.rows.map(([op,keys])=>`
+    <div class="row"><div class="op">${op}</div><div class="key">${keycap(keys)}</div></div>
+  `).join('');
+  card.appendChild(title); card.appendChild(panel); return card;
+}
+function render(){
+  wrap.innerHTML = ''; dots.innerHTML = '';
+  DATA.forEach((page)=>{
+    wrap.appendChild(makeCard(page));
+    const d = document.createElement('div'); d.className='dot'; dots.appendChild(d);
+  });
+  updateDots(); jumpToInitial();
+}
+function getParam(name){
+  const m = location.search.match(new RegExp('[?&]'+name+'=([^&]+)')); return m ? decodeURIComponent(m[1]) : null;
+}
+function jumpToInitial(){
+  const idx = Math.max(0, Math.min(Number(getParam('cat')||0), DATA.length-1));
+  wrap.scrollLeft = idx * wrap.clientWidth; updateDots();
+}
+function updateDots(){
+  const idx = Math.round(wrap.scrollLeft / wrap.clientWidth);
+  [...dots.children].forEach((el,i)=>el.classList.toggle('active', i===idx));
+}
+window.addEventListener('resize', updateDots);
+wrap.addEventListener('scroll', ()=>requestAnimationFrame(updateDots));
+
+/* ========= データ（Windows + VS Code） ========= */
+/* Windows（14カテゴリ） */
+const WIN = [
+  {cat:"Windows｜基本編集（1）", rows:[
+    ["コピー","Ctrl + C"],["切り取り","Ctrl + X"],["貼り付け","Ctrl + V"],
+    ["元に戻す","Ctrl + Z"],["やり直し","Ctrl + Y"],["全選択","Ctrl + A"],
+    ["保存","Ctrl + S"],["名前を付けて保存","Ctrl + Shift + S"],["印刷","Ctrl + P"],
+  ]},
+  {cat:"Windows｜基本編集（2）", rows:[
+    ["検索","Ctrl + F"],["置換","Ctrl + H"],["すべて置換（対応）","Ctrl + Shift + H"],
+    ["スクショ（領域）","Win + Shift + S"],["絵文字パネル","Win + ."],
+    ["太字/斜体/下線（対応）","Ctrl + B / I / U"],["タスクマネージャ","Ctrl + Shift + Esc"],
+    ["アプリ終了","Alt + F4"],["コンテキストメニュー","Shift + F10"],
+  ]},
+  {cat:"Windows｜テキスト移動/選択", rows:[
+    ["単語単位で移動","Ctrl + Left / Right"],["単語単位で選択","Ctrl + Shift + Left / Right"],
+    ["行頭 / 行末へ","Home / End"],["行頭 / 行末を選択","Shift + Home / End"],
+    ["文頭 / 文末（全体）","Ctrl + Home / End"],["ページ上下","PageUp / PageDown"],
+    ["1語削除（左）","Ctrl + Backspace"],["1語削除（右）","Ctrl + Delete"],
+    ["行削除（対応エディタ）","Ctrl + Shift + K"],
+  ]},
+  {cat:"Windows｜ウィンドウ/仮想デスクトップ", rows:[
+    ["アプリ切替","Alt + Tab"],["タスクビュー","Win + Tab"],["デスクトップ表示/隠す","Win + D"],
+    ["仮想デスクトップ 新規/切替","Win + Ctrl + D / Win + Ctrl + Left/Right"],
+    ["スナップ 左/右","Win + Left / Right"],["最大化/最小化","Win + Up / Down"],
+    ["画面ロック","Win + L"],["全画面（対応）","F11"],["外部ディスプレイ切替","Win + P"],
+  ]},
+  {cat:"Windows｜ファイル/システム", rows:[
+    ["エクスプローラを開く","Win + E"],["検索（スタート）","Win"],["プロパティ","Alt + Enter"],
+    ["新規フォルダ","Ctrl + Shift + N"],["リネーム","F2"],["削除 / 完全削除","Delete / Shift + Delete"],
+    ["実行ダイアログ","Win + R"],["表示の更新（エクスプローラ）","F5"],["画面回転（対応機）","Ctrl + Alt + Arrow keys"],
+  ]},
+  {cat:"Windows｜ブラウザ（Edge/Chrome）", rows:[
+    ["新しいタブ / 閉じる","Ctrl + T / Ctrl + W"],["閉じたタブ復元","Ctrl + Shift + T"],
+    ["新規ウィンドウ / シークレット","Ctrl + N / Ctrl + Shift + N"],["タブ移動（次/前）","Ctrl + Tab / Ctrl + Shift + Tab"],
+    ["特定タブへ","Ctrl + 1〜9"],["アドレスバーへ","Ctrl + L"],["再読み込み / 強制","Ctrl + R / Ctrl + F5"],
+    ["ズーム（+ / − / 100%）","Ctrl + + / - / 0"],["デベロッパーツール","F12 / Ctrl + Shift + I"],
+  ]},
+  {cat:"Windows｜VS Code（共通）", rows:[
+    ["コマンドパレット","Ctrl + Shift + P"],["ファイルへ移動","Ctrl + P"],["行へ移動","Ctrl + G"],
+    ["サイドバー表示切替","Ctrl + B"],["統合ターミナル","Ctrl + `"],["複数カーソル追加","Alt + Click / Ctrl + Alt + Up/Down"],
+    ["行の複製 / 移動","Shift + Alt + Down/Up / Alt + Down/Up"],["フォーマット","Shift + Alt + F"],["検索 / 置換（パネル）","Ctrl + F / Ctrl + H"],
+  ]},
+  {cat:"Windows｜ターミナル/コマンド", rows:[
+    ["履歴移動","Up / Down"],["行頭 / 行末へ","Home / End"],["カーソル以降削除","Ctrl + K"],
+    ["行全削除（プロンプトまで）","Ctrl + U"],["単語削除（左）","Ctrl + Backspace"],["停止 / 中断","Ctrl + C / Ctrl + Z"],
+    ["コピー / 貼り付け（Windows端末）","Ctrl + Shift + C / V"],["スクロール","Shift + PageUp / PageDown"],["クリア","Ctrl + L（対応シェル）"],
+  ]},
+  {cat:"Windows｜Excel / スプレッドシート", rows:[
+    ["セル編集","F2"],["セル内改行","Alt + Enter"],["行 / 列を選択","Shift + Space / Ctrl + Space"],
+    ["行 / 列の挿入","Ctrl + Shift + +"],["行 / 列の削除","Ctrl + -"],["範囲選択を広げる","Shift + Arrow keys"],
+    ["末尾まで選択","Ctrl + Shift + Arrow keys"],["最終セル / 先頭セル","Ctrl + End / Ctrl + Home"],["検索 / 置換","Ctrl + F / Ctrl + H"],
+  ]},
+  {cat:"Windows｜エクスプローラ操作（タブ/移動）", rows:[
+    ["アドレスバーへ","Alt + D"],["検索バーへ","Ctrl + E / Ctrl + F"],["新しいウィンドウ","Ctrl + N"],
+    ["タブを開く/閉じる（Win11）","Ctrl + T / Ctrl + W"],["タブ切替","Ctrl + Tab / Ctrl + Shift + Tab"],
+    ["前のフォルダ / 次のフォルダ","Alt + Left / Alt + Right"],["上の階層へ","Alt + Up"],
+    ["表示切替（詳細/アイコン等）","Ctrl + Shift + 数字"],["プロパティを開く","Alt + Enter"],
+  ]},
+  {cat:"Windows｜システム＆検索", rows:[
+    ["設定を開く","Win + I"],["検索（スタート）","Win + S"],["クイック設定（音量/BT等）","Win + A"],
+    ["通知センター","Win + N"],["アクセシビリティ","Win + U"],["クリップボード履歴","Win + V"],
+    ["クイックリンクメニュー","Win + X"],["タスクバーのアプリ起動","Win + 1〜9"],["ファイル名を指定して実行","Win + R"],
+  ]},
+  {cat:"Windows｜画面キャプチャ", rows:[
+    ["全画面キャプチャ","PrintScreen"],["アクティブウィンドウ","Alt + PrintScreen"],["全画面を保存（ピクチャへ）","Win + PrintScreen"],
+    ["領域キャプチャ（スニッピング）","Win + Shift + S"],["ゲームバー録画","Win + G → Win + Alt + R"],
+    ["拡大鏡ON/OFF","Win + + / Win + Esc"],["拡大倍率 ±","Win + + / Win + -"],["拡大鏡 全画面/デスクトップ","Ctrl + Alt + F / D"],["拡大鏡ビュー切替","Ctrl + Alt + M"],
+  ]},
+  {cat:"Windows｜入力補助（IME/変換）", rows:[
+    ["IME ON/OFF","Alt + 半角/全角"],["ひらがな","F6"],["カタカナ","F7"],
+    ["全角英数","F9"],["半角英数","F10"],["変換候補ページ切替","PageUp / PageDown"],
+    ["前候補 / 次候補","Shift + Left / Right"],["無変換 / 変換","無変換 / 変換"],["絵文字/顔文字/記号","Win + ."],
+  ]},
+  {cat:"Windows｜その他便利（電源/クイックリンク）", rows:[
+    ["ロック","Win + L"],["サインアウト画面","Ctrl + Alt + Delete"],["電源メニュー（デスクトップで）","Alt + F4"],
+    ["すべて最小化 / 元に戻す","Win + M / Win + Shift + M"],["一時的にデスクトップ表示","Win + ,（押している間）"],
+    ["デスクトップ 新規/切替/削除","Win + Ctrl + D / Left/Right / F4"],["スクリーンキーボード","Win + Ctrl + O"],
+    ["ナレーター","Win + Ctrl + Enter"],["スティッキーキー（固定キー）","Shift ×5回"],
+  ]},
+];
+
+/* VS Code（11カテゴリ） */
+const VSC = [
+  {cat:"VS Code｜基本編集", rows:[
+    ["コピー / 切り取り / 貼り付け","Ctrl + C / Ctrl + X / Ctrl + V"],
+    ["行コピー（複製）","Shift + Alt + Down / Up"],
+    ["行の移動","Alt + Down / Up"],
+    ["行の削除","Ctrl + Shift + K"],
+    ["コメントアウト（トグル）","Ctrl + /"],
+    ["ブロックコメント","Shift + Alt + A"],
+    ["インデント追加/削除","Ctrl + ] / Ctrl + ["],
+    ["空行を下/上に挿入","Ctrl + Enter / Ctrl + Shift + Enter"],
+    ["ドキュメント整形（フォーマット）","Shift + Alt + F"],
+    ["保存 / すべて保存","Ctrl + S / Ctrl + K, S"],
+    ["末尾の空白をトリム","Ctrl + K, Ctrl + X"],
+  ]},
+  {cat:"VS Code｜検索・置換", rows:[
+    ["検索 / 置換","Ctrl + F / Ctrl + H"],
+    ["次候補 / 前候補","Enter / Shift + Enter"],
+    ["ファイル横断 検索/置換","Ctrl + Shift + F / Ctrl + Shift + H"],
+    ["正規表現 / 大文字小文字 / 単語単位","Alt + R / Alt + C / Alt + W"],
+    ["次を検索して追加選択","Ctrl + D"],
+    ["一致箇所を全て選択","Ctrl + Shift + L"],
+    ["選択を検索パネルに送る","Ctrl + F → Alt + Enter"],
+  ]},
+  {cat:"VS Code｜ファイル/エディタ操作", rows:[
+    ["新規 / 開く / 閉じる","Ctrl + N / Ctrl + O / Ctrl + W"],
+    ["タブ切替（次/前）","Ctrl + Tab / Ctrl + Shift + Tab"],
+    ["エディタ分割（縦）","Ctrl + \\\\"],
+    ["エディタグループ切替（次/前）","Ctrl + K, Right / Ctrl + K, Left"],
+    ["サイドバー表示切替","Ctrl + B"],
+    ["エクスプローラ表示","Ctrl + Shift + E"],
+    ["最近使ったファイルへ","Ctrl + P"],
+    ["ファイルのパスをコピー","Ctrl + K, P"],
+    ["保存せず閉じる","Ctrl + K, W"],
+  ]},
+  {cat:"VS Code｜ナビゲーション/ビュー", rows:[
+    ["コマンドパレット","Ctrl + Shift + P / F1"],
+    ["アウトライン（シンボル）表示","Ctrl + Shift + O"],
+    ["定義へ移動 / 宣言へ","F12 / Ctrl + F12"],
+    ["定義をピーク表示","Alt + F12"],
+    ["参照を表示","Shift + F12"],
+    ["戻る / 進む","Alt + Left / Alt + Right"],
+    ["問題（エラー）ビュー","Ctrl + Shift + M"],
+    ["拡張機能ビュー","Ctrl + Shift + X"],
+    ["デバッグビュー","Ctrl + Shift + D"],
+    ["ソース管理（Git）","Ctrl + Shift + G"],
+  ]},
+  {cat:"VS Code｜編集支援（Go To/Refactor/整形）", rows:[
+    ["シンボルへ移動（ファイル内）","Ctrl + Shift + O"],
+    ["ワークスペースのシンボルへ","Ctrl + T"],
+    ["名前の変更","F2"],
+    ["クイックフィックス / リファクタ","Ctrl + . / Ctrl + Shift + R"],
+    ["インポートの自動整理","Ctrl + Shift + O（言語拡張により）"],
+    ["折りたたみ / 展開","Ctrl + Shift + [ / ]"],
+    ["すべて折りたたむ / すべて展開","Ctrl + K, Ctrl + 0 / Ctrl + K, Ctrl + J"],
+    ["選択範囲をフォーマット","Ctrl + K, Ctrl + F"],
+    ["Markdown プレビュー","Ctrl + K, V"],
+  ]},
+  {cat:"VS Code｜マルチカーソル/選択", rows:[
+    ["カーソルを上下に追加","Ctrl + Alt + Down / Up"],
+    ["単語ごとに選択を追加","Ctrl + D"],
+    ["一致箇所を全て選択","Ctrl + Shift + L"],
+    ["列選択（ボックス選択）","Shift + Alt + Drag"],
+    ["選択を広げる / 縮める","Shift + Alt + Right / Left"],
+  ]},
+  {cat:"VS Code｜表示/レイアウト", rows:[
+    ["全画面切替","F11"],
+    ["Zen Mode（集中）","Ctrl + K, Z"],
+    ["ズーム ± / リセット","Ctrl + + / Ctrl + - / Ctrl + 0"],
+    ["パネル（ターミナル/出力/問題）表示切替","Ctrl + J"],
+    ["エディタを固定（ピン留め）","Ctrl + K, Enter"],
+    ["ミニマップ表示切替","Ctrl + K, M"],
+  ]},
+  {cat:"VS Code｜デバッグ", rows:[
+    ["開始 / 続行","F5"],
+    ["停止","Shift + F5"],
+    ["再起動","Ctrl + Shift + F5"],
+    ["ステップオーバー / イン / アウト","F10 / F11 / Shift + F11"],
+    ["ブレークポイント切替","F9"],
+    ["次/前のブレークポイントへ","Alt + F9 / Shift + Alt + F9"],
+  ]},
+  {cat:"VS Code｜統合ターミナル", rows:[
+    ["ターミナル表示/非表示","Ctrl + `"],
+    ["新規ターミナル","Ctrl + Shift + `"],
+    ["ターミナル分割","Ctrl + Shift + 5"],
+    ["次/前のターミナル","Ctrl + PageDown / Ctrl + PageUp"],
+    ["アクティブターミナルを終了","Ctrl + Shift + W"],
+    ["クリア","Ctrl + K"],
+  ]},
+  {cat:"VS Code｜Git/ソース管理", rows:[
+    ["ソース管理ビュー","Ctrl + Shift + G"],
+    ["コミット（メッセージ欄で）","Ctrl + Enter"],
+    ["差分表示（選択ファイル）","Enter（SCMビュー）"],
+    ["プル / プッシュ / フェッチ","Ctrl + Shift + P → Git: Pull / Push / Fetch"],
+    ["ブランチ切替/作成","Ctrl + Shift + P → Git: Checkout / Create Branch"],
+  ]},
+  {cat:"VS Code｜ワークベンチ全般（設定/キーバインド）", rows:[
+    ["設定（UI）","Ctrl + ,"],
+    ["キーボードショートカット","Ctrl + K, Ctrl + S"],
+    ["設定（settings.json）","Ctrl + Shift + P → Open Settings (JSON)"],
+    ["ユーザースニペット","Ctrl + Shift + P → Configure User Snippets"],
+    ["開発者ツール（VS Code）","Ctrl + Shift + I"],
+  ]},
+];
+
+const DATA = [...WIN, ...VSC];
+render();
+</script>
+</body>
+</html>

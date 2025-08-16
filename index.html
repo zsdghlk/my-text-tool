@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>ショートカット図鑑｜トップ</title>
+<style>
+  :root{ --bg:#0b1020; --card:#0d1326; --text:#e5e7eb; --muted:#9aa3b2; --border:#1b2542; --accent:#6ee7ff; }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans JP",sans-serif;
+    background:radial-gradient(800px 500px at 15% -10%, #152052 0%, transparent 60%), var(--bg);
+    color:var(--text); display:flex; flex-direction:column;
+  }
+  header{padding:calc(env(safe-area-inset-top) + 14px) 16px 8px}
+  h1{margin:0; font-size:18px; letter-spacing:.2px}
+  .section{
+    padding:10px 16px 6px;
+    position:sticky; top:0; background:linear-gradient(0deg, rgba(11,16,32,0), rgba(11,16,32,.85) 50%, rgba(11,16,32,1));
+    backdrop-filter: blur(4px); z-index:1;
+  }
+  .section h2{margin:0; font-size:14px; color:var(--muted); letter-spacing:.2px}
+  .grid{
+    display:grid; gap:12px; padding:8px 16px 20px; margin-bottom:8px;
+    grid-template-columns:repeat(2, minmax(0,1fr));
+  }
+  a.card{
+    display:flex; align-items:center; justify-content:center;
+    text-decoration:none; color:inherit; text-align:center;
+    padding:18px 12px; min-height:90px;
+    border-radius:14px; background:linear-gradient(180deg,#121b38, #0d1326);
+    border:1px solid var(--border); font-weight:700; font-size:15px; letter-spacing:.2px;
+    transition:transform .06s ease;
+  }
+  a.card:active{ transform:scale(.98) }
+  footer{padding:10px 16px 16px; color:var(--muted); font-size:12px; text-align:center}
+</style>
+</head>
+<body>
+  <header><h1>ショートカット図鑑</h1></header>
+
+  <!-- セクションは「Windows → VS Code」の順。app.html の DATA と対応 -->
+  <div id="root"></div>
+
+  <footer>© your-site</footer>
+
+<script>
+/* app.html の DATA 順に合わせています（0始まり）
+   Windows: 0-13,  VS Code: 14-24
+*/
+const GROUPS = [
+  {
+    title: "Windows",
+    items: [
+      ["基本編集（1）", 0],
+      ["基本編集（2）", 1],
+      ["テキスト移動/選択", 2],
+      ["ウィンドウ/仮想デスクトップ", 3],
+      ["ファイル/システム", 4],
+      ["ブラウザ（Edge/Chrome）", 5],
+      ["VS Code（共通）", 6],
+      ["ターミナル/コマンド", 7],
+      ["Excel / スプレッドシート", 8],
+      ["エクスプローラ操作（タブ/移動）", 9],
+      ["システム＆検索", 10],
+      ["画面キャプチャ", 11],
+      ["入力補助（IME/変換）", 12],
+      ["その他便利（電源/クイックリンク）", 13],
+    ],
+  },
+  {
+    title: "VS Code",
+    items: [
+      ["基本編集", 14],
+      ["検索・置換", 15],
+      ["ファイル/エディタ操作", 16],
+      ["ナビゲーション/ビュー", 17],
+      ["編集支援（Go To/Refactor/整形）", 18],
+      ["マルチカーソル/選択", 19],
+      ["表示/レイアウト", 20],
+      ["デバッグ", 21],
+      ["統合ターミナル", 22],
+      ["Git/ソース管理", 23],
+      ["ワークベンチ全般（設定/キーバインド）", 24],
+    ],
+  },
+];
+
+const root = document.getElementById('root');
+
+function renderGroup(title, items){
+  const sec = document.createElement('section');
+  sec.innerHTML = `
+    <div class="section"><h2>${title}</h2></div>
+    <div class="grid">${items.map(([label, idx]) =>
+      `<a class="card" href="app.html?cat=${idx}">${title}｜${label}</a>`
+    ).join('')}</div>
+  `;
+  root.appendChild(sec);
+}
+
+GROUPS.forEach(g => renderGroup(g.title, g.items));
+</script>
+</body>
+</html>
