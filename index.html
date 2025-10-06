@@ -86,6 +86,48 @@
     a.card{ transition:none }
   }
 </style>
+
+<!-- 💡 追加：スマホ対応の基本 -->
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<style>
+  /* 全体の箱の考え方を統一 */
+  *, *::before, *::after { box-sizing: border-box; }
+
+  /* 基本文字サイズ：画面に応じて自動調整（14px〜18px） */
+  html { font-size: clamp(14px, 2.5vw, 18px); }
+  body { margin: 0; line-height: 1.7; -webkit-text-size-adjust: 100%; }
+
+  /* 横幅を詰めすぎず広げすぎない中央レイアウト */
+  .container {
+    max-width: min(960px, 92vw);
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+  /* 画像・動画・埋め込みははみ出さない */
+  img, video, iframe { max-width: 100%; height: auto; }
+
+  /* コードや長文ははみ出し対策 */
+  pre, code { white-space: pre-wrap; word-break: break-word; }
+  pre { padding: 12px; border-radius: 8px; overflow-x: auto; }
+
+  /* 表は小さい画面で横スクロール許可 */
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { padding: .6em; border-bottom: 1px solid #ddd; }
+
+  /* ボタン/入力もタップしやすいサイズに */
+  button, input, select, textarea { font: inherit; padding: .6em .9em; }
+
+  /* 見出しは画面幅に合わせて少し伸縮 */
+  h1{ font-size: clamp(1.6rem, 5vw, 2.2rem); margin: .2em 0 .6em; }
+  h2{ font-size: clamp(1.3rem, 4vw, 1.8rem); margin: 1.2em 0 .5em; }
+  h3{ font-size: clamp(1.1rem, 3.5vw, 1.4rem); margin: 1em 0 .4em; }
+</style>
+
+
+  
 </head>
 <body>
   <header>
@@ -186,3 +228,4 @@ activate('win');
 </script>
 </body>
 </html>
+
