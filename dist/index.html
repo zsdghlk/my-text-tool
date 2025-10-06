@@ -99,6 +99,35 @@
     .seg button[aria-pressed="true"]{ box-shadow:none }
     a.card{ transition:none }
   }
+
+
+/* ===== 追加：PCで列数と余白を増やす ===== */
+
+/* タブや見出し・グリッドを中央寄せに（広い画面で間延びしない） */
+@media (min-width: 768px){
+  .seg,
+  .sectionTitle,
+  .grid { max-width: 1100px; margin-left: auto; margin-right: auto; }
+  /* 3列 */
+  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* PCではカードを少し大きく */
+  a.card{ min-height: 88px; font-size: clamp(15px, 1.6vw, 18px); }
+}
+
+/* さらに広い画面（デスクトップ大）では4列 */
+@media (min-width: 1200px){
+  .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  a.card{ min-height: 96px; font-size: clamp(16px, 1.2vw, 20px); }
+}
+
+/* ウルトラワイドでも読みやすい最大幅 */
+@media (min-width: 1600px){
+  .seg,
+  .sectionTitle,
+  .grid { max-width: 1280px; }
+}
+
+  
 </style>
 </head>
 <body>
