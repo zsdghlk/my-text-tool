@@ -101,6 +101,30 @@
   }
 </style>
 </head>
+<style id="modern-bold">
+/* ===== モダン強調デザイン（視認性＋スタイリッシュ） ===== */
+html{ font-size:clamp(16px,2.8vw,20px) !important; }
+body{ letter-spacing:0.3px; }
+header h1{ font-size:clamp(20px,4vw,28px) !important; font-weight:900; }
+.sectionTitle{ font-size:clamp(14px,2.5vw,16px) !important; color:#a9b7ff; text-transform:uppercase; letter-spacing:1px; }
+.seg{ border:1.5px solid var(--accent) !important; background:rgba(13,19,38,.8) !important; box-shadow:0 0 10px rgba(110,231,255,.2) inset; }
+.seg button{ font-size:clamp(15px,2.5vw,17px) !important; font-weight:900; }
+.seg button[aria-pressed="true"]{ border:2px solid var(--accent) !important; box-shadow:0 0 8px rgba(110,231,255,.4) inset !important; }
+a.card{
+  border:1.5px solid rgba(110,231,255,.5) !important;
+  background:linear-gradient(180deg,#0d1428 0%,#121b38 80%) !important;
+  box-shadow:0 4px 18px rgba(0,0,0,.5), inset 0 0 12px rgba(110,231,255,.15) !important;
+  font-size:clamp(16px,2.5vw,20px) !important;
+  font-weight:900 !important; letter-spacing:0.3px;
+  transition:transform .08s ease, box-shadow .12s ease, border-color .12s ease;
+}
+a.card:hover{
+  transform:translateY(-2px) scale(1.02);
+  border-color:var(--accent) !important;
+  box-shadow:0 8px 24px rgba(110,231,255,.2), inset 0 0 14px rgba(110,231,255,.25) !important;
+}
+footer{ font-size:clamp(13px,2vw,15px) !important; color:#9ea8d0; letter-spacing:0.5px; }
+</style>
 <style id="responsive-override">
 @media (min-width: 768px){
   .seg, .sectionTitle, .grid{

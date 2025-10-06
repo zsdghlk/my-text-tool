@@ -101,6 +101,23 @@
   }
 </style>
 </head>
+<style id="responsive-override">
+@media (min-width: 768px){
+  .seg, .sectionTitle, .grid{
+    max-width:1100px !important;
+    margin-left:auto !important; margin-right:auto !important;
+  }
+  .grid{ grid-template-columns:repeat(3, minmax(0,1fr)) !important; }
+  a.card{ min-height:88px !important; font-size:clamp(15px,1.6vw,18px) !important; }
+}
+@media (min-width: 1200px){
+  .grid{ grid-template-columns:repeat(4, minmax(0,1fr)) !important; }
+  a.card{ min-height:96px !important; font-size:clamp(16px,1.2vw,20px) !important; }
+}
+@media (min-width: 1600px){
+  .seg, .sectionTitle, .grid{ max-width:1280px !important; }
+}
+</style>
 <body>
   <header>
     <h1>ショートカット図鑑</h1>
